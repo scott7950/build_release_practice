@@ -1,12 +1,11 @@
 1. List the shared library dependencies
-
-[scott@localhost ~/share]$ ldd libshared_lib.so 
-	linux-gate.so.1 =>  (0x002af000)
-	libstdc++.so.6 => /usr/lib/libstdc++.so.6 (0x00166000)
-	libm.so.6 => /lib/libm.so.6 (0x004a6000)
-	libgcc_s.so.1 => /lib/libgcc_s.so.1 (0x00a20000)
-	libc.so.6 => /lib/libc.so.6 (0x00d5a000)
-	/lib/ld-linux.so.2 (0x00a89000)
+    [scott@localhost ~/share]$ ldd libshared_lib.so 
+    	linux-gate.so.1 =>  (0x002af000)
+    	libstdc++.so.6 => /usr/lib/libstdc++.so.6 (0x00166000)
+    	libm.so.6 => /lib/libm.so.6 (0x004a6000)
+    	libgcc_s.so.1 => /lib/libgcc_s.so.1 (0x00a20000)
+    	libc.so.6 => /lib/libc.so.6 (0x00d5a000)
+    	/lib/ld-linux.so.2 (0x00a89000)
 
 2. Include a shared library
     1) Put the Shared library in the following configuration file or directory

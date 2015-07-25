@@ -20,3 +20,94 @@
     3) Add specified directory to library cache
     ldconfig -n `pwd`/share
 
+3. Show the Symbols in a library
+    [scott@localhost ~/shared_library]$ nm share1/shared_lib1.o 
+    00000000 V DW.ref.__gxx_personality_v0
+             U _GLOBAL_OFFSET_TABLE_
+    0000009e t _GLOBAL__I_shared_lib1.cpp
+    00000047 t _Z41__static_initialization_and_destruction_0ii
+    00000000 T _Z8display1v
+             U _Z8display2v
+             U _ZNSolsEPFRSoS_E
+             U _ZNSt8ios_base4InitC1Ev
+             U _ZNSt8ios_base4InitD1Ev
+             U _ZSt4cout
+             ...
+
+    [scott@localhost ~/shared_library]$ nm share2/shared_lib2.o 
+    00000000 V DW.ref.__gxx_personality_v0
+             U _GLOBAL_OFFSET_TABLE_
+    00000099 t _GLOBAL__I_shared_lib2.cpp
+    00000042 t _Z41__static_initialization_and_destruction_0ii
+    00000000 T _Z8display2v
+             U _ZNSolsEPFRSoS_E
+             U _ZNSt8ios_base4InitC1Ev
+             U _ZNSt8ios_base4InitD1Ev
+             ...
+
+4. Show the Symbols in shared library
+    [scott@localhost ~/shared_library]$ nm lib/libshared_lib.so 
+    00001b2c d DW.ref.__gxx_personality_v0
+    00001a10 a _DYNAMIC
+    00001b04 a _GLOBAL_OFFSET_TABLE_
+    0000075e t _GLOBAL__I_shared_lib1.cpp
+    00000815 t _GLOBAL__I_shared_lib2.cpp
+             w _Jv_RegisterClasses
+    00000707 t _Z41__static_initialization_and_destruction_0ii
+    000007be t _Z41__static_initialization_and_destruction_0ii
+    000006c0 T _Z8display1v
+    0000077c T _Z8display2v
+             U _ZNSolsEPFRSoS_E@@GLIBCXX_3.4
+             U _ZNSt8ios_base4InitC1Ev@@GLIBCXX_3.4
+             U _ZNSt8ios_base4InitD1Ev@@GLIBCXX_3.4
+             U _ZSt4cout@@GLIBCXX_3.4
+             ...
+
+5. Symbol meaning
+    Symbol Type	    Description
+    A	            The symbol's value is absolute, and will not be changed by further linking.
+    B	            Un-initialized data section
+    D	            Initialized data section
+    T	            Normal code section
+    U	            Undefined symbol used but not defined. Dependency on another library.
+    W	            Doubly defined symbol. If found, allow definition in another library to resolve dependency
+
+6. Displays information about ELF files
+    [scott@localhost ~/shared_library]$ readelf -s main
+    
+    Symbol table '.dynsym' contains 19 entries:
+       Num:    Value  Size Type    Bind   Vis      Ndx Name
+         0: 00000000     0 NOTYPE  LOCAL  DEFAULT  UND 
+         1: 00000000     0 FUNC    GLOBAL DEFAULT  UND __cxa_atexit@GLIBC_2.1.3 (2)
+         2: 00000000     0 NOTYPE  WEAK   DEFAULT  UND __gmon_start__
+         3: 00000000     0 NOTYPE  WEAK   DEFAULT  UND _Jv_RegisterClasses
+         4: 00000000     0 FUNC    GLOBAL DEFAULT  UND _ZNSt8ios_base4InitC1Ev@GLIBCXX_3.4 (3)
+         5: 00000000     0 FUNC    GLOBAL DEFAULT  UND __libc_start_main@GLIBC_2.0 (4)
+         6: 00000000     0 FUNC    GLOBAL DEFAULT  UND _ZStlsISt11char_traitsIcE@GLIBCXX_3.4 (3)
+         7: 00000000     0 FUNC    GLOBAL DEFAULT  UND _ZNSolsEPFRSoS_E@GLIBCXX_3.4 (3)
+         8: 00000000     0 FUNC    GLOBAL DEFAULT  UND _Z8display1v
+         ...
+        12: 08049b34     0 NOTYPE  GLOBAL DEFAULT  ABS __bss_start
+        13: 08048674     0 FUNC    GLOBAL DEFAULT  UND _ZSt4endlIcSt11char_trait@GLIBCXX_3.4 (3)
+        14: 080485b4     0 FUNC    GLOBAL DEFAULT   11 _init
+        ...
+    
+    Symbol table '.symtab' contains 76 entries:
+       Num:    Value  Size Type    Bind   Vis      Ndx Name
+         0: 00000000     0 NOTYPE  LOCAL  DEFAULT  UND 
+         1: 08048134     0 SECTION LOCAL  DEFAULT    1 
+         2: 08048148     0 SECTION LOCAL  DEFAULT    2 
+         ...
+        27: 00000000     0 FILE    LOCAL  DEFAULT  ABS crtstuff.c
+        28: 080499f8     0 OBJECT  LOCAL  DEFAULT   18 __CTOR_LIST__
+        ...
+        67: 08049bd8     0 NOTYPE  GLOBAL DEFAULT  ABS _end
+        68: 00000000     0 FUNC    GLOBAL DEFAULT  UND _ZNSolsEPFRSoS_E@@GLIBCXX
+        69: 00000000     0 FUNC    GLOBAL DEFAULT  UND _Z8display1v
+        70: 08048674     0 FUNC    GLOBAL DEFAULT  UND _ZSt4endlIcSt11char_trait
+        71: 08049b34     0 NOTYPE  GLOBAL DEFAULT  ABS _edata
+        72: 08048684     0 FUNC    GLOBAL DEFAULT  UND __gxx_personality_v0@@CXX
+        73: 0804885a     0 FUNC    GLOBAL HIDDEN    13 __i686.get_pc_thunk.bx
+        74: 08048754    57 FUNC    GLOBAL DEFAULT   13 main
+        75: 080485b4     0 FUNC    GLOBAL DEFAULT   11 _init
+    

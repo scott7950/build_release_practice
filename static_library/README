@@ -1,0 +1,9 @@
+1. Compile with AR library
+    1) Correct
+    g++ main.o -o main -L$(LIB_PATH) -lstatic
+    g++ main.o -o main $(LIB_PATH)/libstatic.a
+
+    2) Error
+    g++ -L$(LIB_PATH) -lstatic main.o -o main
+    g++ $(LIB_PATH)/libstatic.a main.o -o main
+

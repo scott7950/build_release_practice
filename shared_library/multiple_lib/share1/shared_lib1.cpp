@@ -1,4 +1,5 @@
 #include <iostream>
+#include "shared_lib1.h"
 #include "shared_lib2.h"
 
 void display1() {

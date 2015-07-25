@@ -4,7 +4,7 @@ SHARED_LIB2_PATH = $(shell pwd)/share2
 SHARED_LIB_PATH = $(shell pwd)/lib
 
 LD_LIBRARY_PATH = $(SHARED_LIB_PATH)
-
+export LD_LIBRARY_PATH
 
 all: clean run
 
@@ -19,7 +19,7 @@ compile_shared_lib:
 
 compile_main:
 	g++ -I$(SHARED_LIB1_PATH) -c main.cpp -o main.o
-	g++ -L$(SHARED_LIB_PATH) -lshared_lib main.o -o main
+	g++ main.o -o main -L$(SHARED_LIB_PATH) -lshared_lib 
 
 clean:
 	$(MAKE) -C $(SHARED_LIB1_PATH) $@

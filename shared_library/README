@@ -14,5 +14,9 @@
     /etc/ld.so.conf.d
 
     2) Set LD_LIBRARY_PATH
-    export LD_LIBRARY_PATH=./share
+    export LD_LIBRARY_PATH=`pwd`/share
+    (Linux/Solaris: LD_LIBRARY_PATH, SGI: LD_LIBRARYN32_PATH, AIX: LIBPATH, Mac OS X: DYLD_LIBRARY_PATH, HP-UX: SHLIB_PATH)
+
+    3) Add specified directory to library cache
+    ldconfig -n `pwd`/share
 

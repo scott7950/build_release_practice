@@ -1,5 +1,7 @@
 SHARED_LIB_PATH = $(shell pwd)/share
+
 LD_LIBRARY_PATH = $(SHARED_LIB_PATH)
+export LD_LIBRARY_PATH
 
 all: clean run
 

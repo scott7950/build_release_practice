@@ -7,3 +7,77 @@
     g++ -L$(LIB_PATH) -lstatic main.o -o main
     g++ $(LIB_PATH)/libstatic.a main.o -o main
 
+2. Show the libraries in AR library
+    [scott@localhost ~/static_library]$ ar -t lib/libstatic.a 
+    static_lib1.o
+    static_lib2.o
+
+3. Show the Symbols Table in AR library
+    [scott@localhost ~/static_library]$ nm lib/libstatic.a 
+    
+    static_lib1.o:
+    00000071 t _GLOBAL__I__Z8display1v
+    00000031 t _Z41__static_initialization_and_destruction_0ii
+    00000000 T _Z8display1v
+             U _Z8display2v
+             ...
+    
+    static_lib2.o:
+    0000006c t _GLOBAL__I__Z8display2v
+    0000002c t _Z41__static_initialization_and_destruction_0ii
+    00000000 T _Z8display2v
+             U _ZNSolsEPFRSoS_E
+             ...
+
+4. Show the Symbols in a library
+    [scott@localhost ~/static_library]$ nm static1/static_lib1.o 
+    00000071 t _GLOBAL__I__Z8display1v
+    00000031 t _Z41__static_initialization_and_destruction_0ii
+    00000000 T _Z8display1v
+             U _Z8display2v
+             U _ZNSolsEPFRSoS_E
+             ...
+
+5. Symbol meaning
+    Symbol Type	    Description
+    A	            The symbol's value is absolute, and will not be changed by further linking.
+    B	            Un-initialized data section
+    D	            Initialized data section
+    T	            Normal code section
+    U	            Undefined symbol used but not defined. Dependency on another library.
+    W	            Doubly defined symbol. If found, allow definition in another library to resolve dependency
+            
+6. Displays information about ELF files
+    [scott@localhost ~/static_library]$ readelf -s main
+    
+    Symbol table '.dynsym' contains 13 entries:
+       Num:    Value  Size Type    Bind   Vis      Ndx Name
+         0: 00000000     0 NOTYPE  LOCAL  DEFAULT  UND 
+         1: 00000000     0 FUNC    GLOBAL DEFAULT  UND __cxa_atexit@GLIBC_2.1.3 (2)
+         2: 00000000     0 NOTYPE  WEAK   DEFAULT  UND __gmon_start__
+         3: 00000000     0 NOTYPE  WEAK   DEFAULT  UND _Jv_RegisterClasses
+         4: 00000000     0 FUNC    GLOBAL DEFAULT  UND _ZNSt8ios_base4InitC1Ev@GLIBCXX_3.4 (3)
+         5: 00000000     0 FUNC    GLOBAL DEFAULT  UND __libc_start_main@GLIBC_2.0 (4)
+         ...
+    
+    Symbol table '.symtab' contains 85 entries:
+       Num:    Value  Size Type    Bind   Vis      Ndx Name
+         0: 00000000     0 NOTYPE  LOCAL  DEFAULT  UND 
+         1: 08048134     0 SECTION LOCAL  DEFAULT    1 
+         2: 08048148     0 SECTION LOCAL  DEFAULT    2 
+         ...
+        27: 00000000     0 FILE    LOCAL  DEFAULT  ABS crtstuff.c
+        28: 08049b58     0 OBJECT  LOCAL  DEFAULT   18 __CTOR_LIST__
+        ...
+        46: 0804873d    64 FUNC    LOCAL  DEFAULT   13 _Z41__static_initializati
+        47: 0804877d    28 FUNC    LOCAL  DEFAULT   13 _GLOBAL__I__Z8display1v
+        48: 00000000     0 FILE    LOCAL  DEFAULT  ABS static_lib2.cpp
+        49: 08049d3c     1 OBJECT  LOCAL  DEFAULT   25 _ZStL8__ioinit
+        50: 080487c8    64 FUNC    LOCAL  DEFAULT   13 _Z41__static_initializati
+        51: 08048808    28 FUNC    LOCAL  DEFAULT   13 _GLOBAL__I__Z8display2v
+        52: 08049c5c     0 OBJECT  LOCAL  DEFAULT   23 _GLOBAL_OFFSET_TABLE_
+        ...
+        82: 0804889a     0 FUNC    GLOBAL HIDDEN    13 __i686.get_pc_thunk.bx
+        83: 08048674    57 FUNC    GLOBAL DEFAULT   13 main
+        84: 080484e8     0 FUNC    GLOBAL DEFAULT   11 _init
+    

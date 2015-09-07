@@ -1,0 +1,33 @@
+In Makefile:
+    add -ldl for g++ cmd: g++ main.o -o main -L$(SHARED_LIB_PATH) -lshared_lib -ldl
+    remove export LD_LIBRARY_PATH
+
+In share1/shared_lib1.h:
+    add extern "C" on the function declaration
+
+In main.cpp:
+    include dlfcn.h: #include <dlfcn.h>
+
+    open shared library and assign it to void*:
+        void *lib_handle;
+        lib_handle = dlopen("lib/libshared_lib.so", RTLD_LAZY);
+        if(!lib_handle) {
+            std::cerr << dlerror() << std::endl;
+            return 1;
+        }
+
+    load symbol for the function from shared library:
+        char *error;
+        void (*fn)();
+        *(void **) (&fn) = dlsym(lib_handle, "display1");
+        if((error = dlerror()) != NULL) {
+            std::cerr << error << std::endl;
+            return 1;
+        }
+
+    run the function in shared library:
+        (*fn)();
+
+    close shared library handle:
+        dlclose(lib_handle);
+
